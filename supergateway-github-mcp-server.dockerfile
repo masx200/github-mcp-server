@@ -1,4 +1,4 @@
-from docker_mirror/github-github-mcp-server:latest-linux-amd64 as builder
+from docker.cnb.cool/masx200/docker_mirror/github-github-mcp-server:latest-linux-amd64 as builder
 
 
 
