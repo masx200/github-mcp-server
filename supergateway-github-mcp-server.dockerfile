@@ -14,7 +14,6 @@ entrypoint ["docker-entrypoint.sh"]
 
 CMD [ "node" ,"/root/mcp-demo-streamable-http-bridge/bridge-streamable.js" ,"/server/github-mcp-server","stdio"]
 
-
 env PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/server:/root/mcp-demo-streamable-http-bridge
 
 
