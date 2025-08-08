@@ -46,6 +46,7 @@ var (
 			}
 
 			stdioServerConfig := ghmcp.StdioServerConfig{
+				Pretty:               viper.GetBool("pretty"),
 				Version:              version,
 				Host:                 viper.GetString("host"),
 				Token:                token,

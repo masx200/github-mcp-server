@@ -64,6 +64,7 @@ var (
 			}
 
 			stdioServerConfig := ghmcp.StdioServerConfig{
+				Pretty:               viper.GetBool("pretty"),
 				Version:              version,
 				Host:                 viper.GetString("host"),
 				Token:                token,
@@ -238,7 +239,7 @@ func main() {
 	rootCmd.PersistentFlags().Bool("pretty", true, "Pretty print MCP response (only for JSON or JSONL responses)")
 
 	_ = rootCmd.ParseFlags(os.Args[1:])
-
+	_ = viper.BindPFlag("pretty", rootCmd.PersistentFlags().Lookup("pretty"))
 	prettyPrint, err := rootCmd.Flags().GetBool("pretty")
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Error getting pretty flag: %v\n", err)

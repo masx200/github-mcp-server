@@ -15,6 +15,7 @@ import (
 	"gitee.com/masx200/github-mcp-server/pkg/translations"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/sirupsen/logrus"
+	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
 func RunhttpServer(cfg HttpServerConfig) error {
@@ -25,6 +26,18 @@ func RunhttpServer(cfg HttpServerConfig) error {
 	t, dumpTranslations := translations.TranslationHelper()
 
 	logrusLogger := logrus.New()
+	if cfg.Pretty {
+
+		logrusLogger.SetFormatter(&logrus.JSONFormatter{PrettyPrint: true})
+	} else {
+		logrusLogger.SetFormatter(&prefixed.TextFormatter{
+			ForceFormatting: true,
+			ForceColors:     true,
+			FullTimestamp:   true,
+			// 想继续输出 JSON 可改用 prettyjson-formatter 等
+		})
+	}
+	logrusLogger.SetOutput(os.Stderr)
 	if cfg.LogFilePath != "" {
 		file, err := os.OpenFile(cfg.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
 		if err != nil {
@@ -35,8 +48,10 @@ func RunhttpServer(cfg HttpServerConfig) error {
 		logrusLogger.SetOutput(file)
 	}
 	stdLogger := log.New(logrusLogger.Writer(), "httpserver", 0)
+	var ghServer *server.MCPServer
+	var err error
 
-	ghServer, err := NewMCPServer(MCPServerConfig{
+	ghServer, err = NewMCPServer(MCPServerConfig{
 		Version:         cfg.Version,
 		Host:            cfg.Host,
 		Token:           cfg.Token,
@@ -44,8 +59,20 @@ func RunhttpServer(cfg HttpServerConfig) error {
 		DynamicToolsets: cfg.DynamicToolsets,
 		ReadOnly:        cfg.ReadOnly,
 		Translator:      t,
-	}, CreateHooksWithEventLogging(stdLogger))
+	}, CreateHooksWithEventLogging(logrusLogger, cfg.Pretty))
 
+	// } else {
+	// 	ghServer, err = NewMCPServer(MCPServerConfig{
+	// 		Version:         cfg.Version,
+	// 		Host:            cfg.Host,
+	// 		Token:           cfg.Token,
+	// 		EnabledToolsets: cfg.EnabledToolsets,
+	// 		DynamicToolsets: cfg.DynamicToolsets,
+	// 		ReadOnly:        cfg.ReadOnly,
+	// 		Translator:      t,
+	// 	})
+
+	// }
 	if err != nil {
 		return fmt.Errorf("failed to create MCP server: %w", err)
 	}

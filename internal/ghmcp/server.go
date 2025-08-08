@@ -149,6 +149,9 @@ func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
 }
 
 type StdioServerConfig struct {
+
+	// Pretty print JSON responses
+	Pretty bool
 	// Version of the server
 	Version string
 
@@ -204,6 +207,8 @@ func RunStdioServer(cfg StdioServerConfig) error {
 	stdioServer := server.NewStdioServer(ghServer)
 
 	logrusLogger := logrus.New()
+
+	logrusLogger.SetOutput(os.Stderr)
 	if cfg.LogFilePath != "" {
 		file, err := os.OpenFile(cfg.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
 		if err != nil {

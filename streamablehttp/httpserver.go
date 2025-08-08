@@ -11,6 +11,8 @@ import (
 )
 
 type HttpServerConfig struct {
+	// Pretty print JSON responses
+	Pretty bool
 	// Address to listen on(when transport is streamablehttp)(default: ":8080")
 	Address string
 
