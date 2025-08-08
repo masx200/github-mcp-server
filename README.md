@@ -760,25 +760,21 @@ The following sets of tools are available (all are on by default):
 <summary>Actions</summary>
 
 - **cancel_workflow_run** - Cancel workflow run
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **delete_workflow_run_logs** - Delete workflow logs
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **download_workflow_run_artifact** - Download workflow artifact
-
   - `artifact_id`: The unique identifier of the artifact (number, required)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
 - **get_job_logs** - Get job logs
-
   - `failed_only`: When true, gets logs for all failed jobs in run_id (boolean,
     optional)
   - `job_id`: The unique identifier of the workflow job (required for single job
@@ -793,25 +789,21 @@ The following sets of tools are available (all are on by default):
     optional)
 
 - **get_workflow_run** - Get workflow run
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **get_workflow_run_logs** - Get workflow run logs
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **get_workflow_run_usage** - Get workflow usage
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **list_workflow_jobs** - List workflow jobs
-
   - `filter`: Filters jobs by their completed_at timestamp (string, optional)
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
@@ -821,7 +813,6 @@ The following sets of tools are available (all are on by default):
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **list_workflow_run_artifacts** - List workflow artifacts
-
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -830,7 +821,6 @@ The following sets of tools are available (all are on by default):
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **list_workflow_runs** - List workflow runs
-
   - `actor`: Returns someone's workflow runs. Use the login for the user who
     created the workflow run. (string, optional)
   - `branch`: Returns workflow runs associated with a branch. Use the name of
@@ -845,7 +835,6 @@ The following sets of tools are available (all are on by default):
   - `workflow_id`: The workflow ID or workflow file name (string, required)
 
 - **list_workflows** - List workflows
-
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -853,13 +842,11 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **rerun_failed_jobs** - Rerun failed jobs
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
 
 - **rerun_workflow_run** - Rerun workflow run
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `run_id`: The unique identifier of the workflow run (number, required)
@@ -880,7 +867,6 @@ The following sets of tools are available (all are on by default):
 <summary>Code Security</summary>
 
 - **get_code_scanning_alert** - Get code scanning alert
-
   - `alertNumber`: The number of the alert. (number, required)
   - `owner`: The owner of the repository. (string, required)
   - `repo`: The name of the repository. (string, required)
@@ -911,7 +897,6 @@ The following sets of tools are available (all are on by default):
 <summary>Dependabot</summary>
 
 - **get_dependabot_alert** - Get dependabot alert
-
   - `alertNumber`: The number of the alert. (number, required)
   - `owner`: The owner of the repository. (string, required)
   - `repo`: The name of the repository. (string, required)
@@ -930,13 +915,11 @@ The following sets of tools are available (all are on by default):
 <summary>Discussions</summary>
 
 - **get_discussion** - Get discussion
-
   - `discussionNumber`: Discussion Number (number, required)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
 - **get_discussion_comments** - Get discussion comments
-
   - `after`: Cursor for pagination. Use the endCursor from the previous page's
     PageInfo for GraphQL APIs. (string, optional)
   - `discussionNumber`: Discussion Number (number, required)
@@ -946,7 +929,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **list_discussion_categories** - List discussion categories
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
@@ -971,14 +953,12 @@ The following sets of tools are available (all are on by default):
 <summary>Gists</summary>
 
 - **create_gist** - Create Gist
-
   - `content`: Content for simple single-file gist creation (string, required)
   - `description`: Description of the gist (string, optional)
   - `filename`: Filename for simple single-file gist creation (string, required)
   - `public`: Whether the gist is public (boolean, optional)
 
 - **list_gists** - List Gists
-
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
     optional)
@@ -1000,14 +980,12 @@ The following sets of tools are available (all are on by default):
 <summary>Issues</summary>
 
 - **add_issue_comment** - Add comment to issue
-
   - `body`: Comment content (string, required)
   - `issue_number`: Issue number to comment on (number, required)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
 - **add_sub_issue** - Add sub-issue
-
   - `issue_number`: The number of the parent issue (number, required)
   - `owner`: Repository owner (string, required)
   - `replace_parent`: When true, replaces the sub-issue's current parent issue
@@ -1017,13 +995,11 @@ The following sets of tools are available (all are on by default):
     number (number, required)
 
 - **assign_copilot_to_issue** - Assign Copilot to issue
-
   - `issueNumber`: Issue number (number, required)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
 - **create_issue** - Open new issue
-
   - `assignees`: Usernames to assign to this issue (string[], optional)
   - `body`: Issue body content (string, optional)
   - `labels`: Labels to apply to this issue (string[], optional)
@@ -1033,13 +1009,11 @@ The following sets of tools are available (all are on by default):
   - `title`: Issue title (string, required)
 
 - **get_issue** - Get issue details
-
   - `issue_number`: The number of the issue (number, required)
   - `owner`: The owner of the repository (string, required)
   - `repo`: The name of the repository (string, required)
 
 - **get_issue_comments** - Get issue comments
-
   - `issue_number`: Issue number (number, required)
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
@@ -1048,7 +1022,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **list_issues** - List issues
-
   - `direction`: Sort direction (string, optional)
   - `labels`: Filter by labels (string[], optional)
   - `owner`: Repository owner (string, required)
@@ -1061,7 +1034,6 @@ The following sets of tools are available (all are on by default):
   - `state`: Filter by state (string, optional)
 
 - **list_sub_issues** - List sub-issues
-
   - `issue_number`: Issue number (number, required)
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (default: 1) (number, optional)
@@ -1070,7 +1042,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **remove_sub_issue** - Remove sub-issue
-
   - `issue_number`: The number of the parent issue (number, required)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
@@ -1078,7 +1049,6 @@ The following sets of tools are available (all are on by default):
     issue number (number, required)
 
 - **reprioritize_sub_issue** - Reprioritize sub-issue
-
   - `after_id`: The ID of the sub-issue to be prioritized after (either after_id
     OR before_id should be specified) (number, optional)
   - `before_id`: The ID of the sub-issue to be prioritized before (either
@@ -1090,7 +1060,6 @@ The following sets of tools are available (all are on by default):
     as issue number (number, required)
 
 - **search_issues** - Search issues
-
   - `order`: Sort order (string, optional)
   - `owner`: Optional repository owner. If provided with repo, only
     notifications for this repository are listed. (string, optional)
@@ -1121,16 +1090,13 @@ The following sets of tools are available (all are on by default):
 <summary>Notifications</summary>
 
 - **dismiss_notification** - Dismiss notification
-
   - `state`: The new state of the notification (read/done) (string, optional)
   - `threadID`: The ID of the notification thread (string, required)
 
 - **get_notification_details** - Get notification details
-
   - `notificationID`: The ID of the notification (string, required)
 
 - **list_notifications** - List notifications
-
   - `before`: Only show notifications updated before the given time (ISO 8601
     format) (string, optional)
   - `filter`: Filter notifications to, use default unless specified. Read
@@ -1149,14 +1115,12 @@ The following sets of tools are available (all are on by default):
     format) (string, optional)
 
 - **manage_notification_subscription** - Manage notification subscription
-
   - `action`: Action to perform: ignore, watch, or delete the notification
     subscription. (string, required)
   - `notificationID`: The ID of the notification thread. (string, required)
 
 - **manage_repository_notification_subscription** - Manage repository
   notification subscription
-
   - `action`: Action to perform: ignore, watch, or delete the repository
     notification subscription. (string, required)
   - `owner`: The account owner of the repository. (string, required)
@@ -1194,7 +1158,6 @@ The following sets of tools are available (all are on by default):
 
 - **add_comment_to_pending_review** - Add review comment to the requester's
   latest pending pull request review
-
   - `body`: The text of the review comment (string, required)
   - `line`: The line of the blob in the pull request diff that the comment
     applies to. For multi-line comments, the last line of the range (number,
@@ -1215,7 +1178,6 @@ The following sets of tools are available (all are on by default):
 
 - **create_and_submit_pull_request_review** - Create and submit a pull request
   review without comments
-
   - `body`: Review comment text (string, required)
   - `commitID`: SHA of commit to review (string, optional)
   - `event`: Review action to perform (string, required)
@@ -1224,14 +1186,12 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **create_pending_pull_request_review** - Create pending pull request review
-
   - `commitID`: SHA of commit to review (string, optional)
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **create_pull_request** - Open new pull request
-
   - `base`: Branch to merge into (string, required)
   - `body`: PR description (string, optional)
   - `draft`: Create as draft PR (boolean, optional)
@@ -1243,31 +1203,26 @@ The following sets of tools are available (all are on by default):
 
 - **delete_pending_pull_request_review** - Delete the requester's latest pending
   pull request review
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **get_pull_request** - Get pull request details
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **get_pull_request_comments** - Get pull request comments
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **get_pull_request_diff** - Get pull request diff
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **get_pull_request_files** - Get pull request files
-
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -1276,19 +1231,16 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **get_pull_request_reviews** - Get pull request reviews
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **get_pull_request_status** - Get pull request status checks
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **list_pull_requests** - List pull requests
-
   - `base`: Filter by base branch (string, optional)
   - `direction`: Sort direction (string, optional)
   - `head`: Filter by head user/org and branch (string, optional)
@@ -1301,7 +1253,6 @@ The following sets of tools are available (all are on by default):
   - `state`: Filter by state (string, optional)
 
 - **merge_pull_request** - Merge pull request
-
   - `commit_message`: Extra detail for merge commit (string, optional)
   - `commit_title`: Title for merge commit (string, optional)
   - `merge_method`: Merge method (string, optional)
@@ -1310,13 +1261,11 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **request_copilot_review** - Request Copilot review
-
   - `owner`: Repository owner (string, required)
   - `pullNumber`: Pull request number (number, required)
   - `repo`: Repository name (string, required)
 
 - **search_pull_requests** - Search pull requests
-
   - `order`: Sort order (string, optional)
   - `owner`: Optional repository owner. If provided with repo, only
     notifications for this repository are listed. (string, optional)
@@ -1332,7 +1281,6 @@ The following sets of tools are available (all are on by default):
 
 - **submit_pending_pull_request_review** - Submit the requester's latest pending
   pull request review
-
   - `body`: The text of the review comment (string, optional)
   - `event`: The event to perform (string, required)
   - `owner`: Repository owner (string, required)
@@ -1340,7 +1288,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **update_pull_request** - Edit pull request
-
   - `base`: New base branch name (string, optional)
   - `body`: New description (string, optional)
   - `draft`: Mark pull request as draft (true) or ready for review (false)
@@ -1367,14 +1314,12 @@ The following sets of tools are available (all are on by default):
 <summary>Repositories</summary>
 
 - **create_branch** - Create branch
-
   - `branch`: Name for new branch (string, required)
   - `from_branch`: Source branch (defaults to repo default) (string, optional)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
 - **create_or_update_file** - Create or update file
-
   - `branch`: Branch to create/update the file in (string, required)
   - `content`: Content of the file (string, required)
   - `message`: Commit message (string, required)
@@ -1385,14 +1330,12 @@ The following sets of tools are available (all are on by default):
     replaced. (string, optional)
 
 - **create_repository** - Create repository
-
   - `autoInit`: Initialize with README (boolean, optional)
   - `description`: Repository description (string, optional)
   - `name`: Repository name (string, required)
   - `private`: Whether repo should be private (boolean, optional)
 
 - **delete_file** - Delete file
-
   - `branch`: Branch to delete the file from (string, required)
   - `message`: Commit message (string, required)
   - `owner`: Repository owner (username or organization) (string, required)
@@ -1400,13 +1343,11 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **fork_repository** - Fork repository
-
   - `organization`: Organization to fork to (string, optional)
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
 
 - **get_commit** - Get commit details
-
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -1415,7 +1356,6 @@ The following sets of tools are available (all are on by default):
   - `sha`: Commit SHA, branch name, or tag name (string, required)
 
 - **get_file_contents** - Get file or directory contents
-
   - `owner`: Repository owner (username or organization) (string, required)
   - `path`: Path to file/directory (directories must end with a slash '/')
     (string, optional)
@@ -1426,13 +1366,11 @@ The following sets of tools are available (all are on by default):
     ref (string, optional)
 
 - **get_tag** - Get tag details
-
   - `owner`: Repository owner (string, required)
   - `repo`: Repository name (string, required)
   - `tag`: Tag name (string, required)
 
 - **list_branches** - List branches
-
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -1440,7 +1378,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **list_commits** - List commits
-
   - `author`: Author username or email address to filter commits by (string,
     optional)
   - `owner`: Repository owner (string, required)
@@ -1453,7 +1390,6 @@ The following sets of tools are available (all are on by default):
     list commits up to that SHA. (string, optional)
 
 - **list_tags** - List tags
-
   - `owner`: Repository owner (string, required)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -1461,7 +1397,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **push_files** - Push files to repository
-
   - `branch`: Branch to push to (string, required)
   - `files`: Array of file objects to push, each object with path (string) and
     content (string) (object[], required)
@@ -1470,7 +1405,6 @@ The following sets of tools are available (all are on by default):
   - `repo`: Repository name (string, required)
 
 - **search_code** - Search code
-
   - `order`: Sort order for results (string, optional)
   - `page`: Page number for pagination (min 1) (number, optional)
   - `perPage`: Results per page for pagination (min 1, max 100) (number,
@@ -1496,7 +1430,6 @@ The following sets of tools are available (all are on by default):
 <summary>Secret Protection</summary>
 
 - **get_secret_scanning_alert** - Get secret scanning alert
-
   - `alertNumber`: The number of the alert. (number, required)
   - `owner`: The owner of the repository. (string, required)
   - `repo`: The name of the repository. (string, required)
