@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/github/github-mcp-server/pkg/raw"
+	"gitee.com/masx200/github-mcp-server/pkg/raw"
 	"github.com/google/go-github/v73/github"
 	"github.com/shurcooL/githubv4"
 	"github.com/stretchr/testify/assert"

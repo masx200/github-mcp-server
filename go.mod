@@ -1,4 +1,4 @@
-module github.com/github/github-mcp-server
+module gitee.com/masx200/github-mcp-server
 
 go 1.23.7
 

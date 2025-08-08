@@ -94,7 +94,7 @@ Enterprise Cloud (GHEC).
   when available
 
 For integration architecture and implementation details, see the
-[Host Integration Guide](https://github.com/github/github-mcp-server/blob/main/docs/host-integration.md).
+[Host Integration Guide](https://gitee.com/masx200/github-mcp-server/blob/main/docs/host-integration.md).
 
 ## Where It's Used
 
@@ -335,7 +335,7 @@ API log entries and OAuth/GitHub App events.
 **Questions or Feedback?**
 
 Open an
-[issue in the github-mcp-server repository](https://github.com/github/github-mcp-server/issues)
+[issue in the github-mcp-server repository](https://gitee.com/masx200/github-mcp-server/issues)
 with the label "policies & governance" attached.
 
 This document reflects GitHub MCP Server policies as of July 2025. Policies and

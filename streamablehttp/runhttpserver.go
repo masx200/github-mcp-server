@@ -3,17 +3,18 @@ package streamablehttp
 import (
 	"context"
 	"fmt"
-	"github.com/github/github-mcp-server/pkg/errors"
-	mcplog "github.com/github/github-mcp-server/pkg/log"
-	"github.com/github/github-mcp-server/pkg/translations"
-	"github.com/mark3labs/mcp-go/server"
-	"github.com/sirupsen/logrus"
 	"io"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"gitee.com/masx200/github-mcp-server/pkg/errors"
+	mcplog "gitee.com/masx200/github-mcp-server/pkg/log"
+	"gitee.com/masx200/github-mcp-server/pkg/translations"
+	"github.com/mark3labs/mcp-go/server"
+	"github.com/sirupsen/logrus"
 )
 
 func RunhttpServer(cfg HttpServerConfig) error {

@@ -1,8 +1,8 @@
 ## Contributing
 
-[fork]: https://github.com/github/github-mcp-server/fork
-[pr]: https://github.com/github/github-mcp-server/compare
-[style]: https://github.com/github/github-mcp-server/blob/main/.golangci.yml
+[fork]: https://gitee.com/masx200/github-mcp-server/fork
+[pr]: https://gitee.com/masx200/github-mcp-server/compare
+[style]: https://gitee.com/masx200/github-mcp-server/blob/main/.golangci.yml
 
 Hi there! We're thrilled that you'd like to contribute to this project. Your
 help is essential for keeping it great.

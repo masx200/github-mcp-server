@@ -11,8 +11,8 @@ systems.
 
 - [github.com/fsnotify/fsnotify](https://pkg.go.dev/github.com/fsnotify/fsnotify)
   ([BSD-3-Clause](https://github.com/fsnotify/fsnotify/blob/v1.8.0/LICENSE))
-- [github.com/github/github-mcp-server](https://pkg.go.dev/github.com/github/github-mcp-server)
-  ([MIT](https://github.com/github/github-mcp-server/blob/HEAD/LICENSE))
+- [gitee.com/masx200/github-mcp-server](https://pkg.go.dev/gitee.com/masx200/github-mcp-server)
+  ([MIT](https://gitee.com/masx200/github-mcp-server/blob/HEAD/LICENSE))
 - [github.com/go-openapi/jsonpointer](https://pkg.go.dev/github.com/go-openapi/jsonpointer)
   ([Apache-2.0](https://github.com/go-openapi/jsonpointer/blob/v0.19.5/LICENSE))
 - [github.com/go-openapi/swag](https://pkg.go.dev/github.com/go-openapi/swag)
@@ -82,4 +82,4 @@ systems.
 - [gopkg.in/yaml.v3](https://pkg.go.dev/gopkg.in/yaml.v3)
   ([MIT](https://github.com/go-yaml/yaml/blob/v3.0.1/LICENSE))
 
-[github/github-mcp-server]: https://github.com/github/github-mcp-server
+[github/github-mcp-server]: https://gitee.com/masx200/github-mcp-server

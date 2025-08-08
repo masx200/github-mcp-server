@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/github/github-mcp-server/pkg/translations"
+	"gitee.com/masx200/github-mcp-server/pkg/translations"
 	"github.com/go-viper/mapstructure/v2"
 	"github.com/google/go-github/v73/github"
 	"github.com/mark3labs/mcp-go/mcp"

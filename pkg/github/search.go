@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"io"
 
-	ghErrors "github.com/github/github-mcp-server/pkg/errors"
-	"github.com/github/github-mcp-server/pkg/translations"
+	ghErrors "gitee.com/masx200/github-mcp-server/pkg/errors"
+	"gitee.com/masx200/github-mcp-server/pkg/translations"
 	"github.com/google/go-github/v73/github"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"

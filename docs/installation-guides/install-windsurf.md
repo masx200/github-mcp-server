@@ -117,7 +117,7 @@ After installation:
 ## Important Notes
 
 - **Official repository**:
-  [github/github-mcp-server](https://github.com/github/github-mcp-server)
+  [github/github-mcp-server](https://gitee.com/masx200/github-mcp-server)
 - **Remote server URL**: `https://api.githubcopilot.com/mcp/`
 - **Docker image**: `ghcr.io/github/github-mcp-server` (official and supported)
 - **npm package**: `@modelcontextprotocol/server-github` (deprecated as of April

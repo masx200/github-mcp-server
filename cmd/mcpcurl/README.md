@@ -30,7 +30,7 @@ go build -o mcpcurl
 ### Using Go Install
 
 ```bash
-go install github.com/github/github-mcp-server/cmd/mcpcurl@latest
+go install gitee.com/masx200/github-mcp-server/cmd/mcpcurl@latest
 ```
 
 ### Verify Installation
@@ -106,8 +106,8 @@ Usage:
 
 Flags:
   -h, --help                 help for get_issue
-      --issue_number float   
-      --owner string         
+      --issue_number float
+      --owner string
       --repo string
 
 Global Flags:

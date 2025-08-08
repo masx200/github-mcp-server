@@ -7,7 +7,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/github/github-mcp-server/pkg/translations"
+	"gitee.com/masx200/github-mcp-server/pkg/translations"
 )
 
 type HttpServerConfig struct {
@@ -24,18 +24,18 @@ type HttpServerConfig struct {
 	Token func(ctx context.Context) (string, error)
 
 	// EnabledToolsets is a list of toolsets to enable
-	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#tool-configuration
+	// See: https://gitee.com/masx200/github-mcp-server?tab=readme-ov-file#tool-configuration
 	EnabledToolsets []string
 
 	// Whether to enable dynamic toolsets
-	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#dynamic-tool-discovery
+	// See: https://gitee.com/masx200/github-mcp-server?tab=readme-ov-file#dynamic-tool-discovery
 	DynamicToolsets bool
 
 	// ReadOnly indicates if we should only register read-only tools
 	ReadOnly bool
 
 	// ExportTranslations indicates if we should export translations
-	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#i18n--overriding-descriptions
+	// See: https://gitee.com/masx200/github-mcp-server?tab=readme-ov-file#i18n--overriding-descriptions
 	ExportTranslations bool
 
 	// EnableCommandLogging indicates if we should log commands
@@ -56,11 +56,11 @@ type MCPServerConfig struct {
 	Token func(ctx context.Context) (string, error)
 
 	// EnabledToolsets is a list of toolsets to enable
-	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#tool-configuration
+	// See: https://gitee.com/masx200/github-mcp-server?tab=readme-ov-file#tool-configuration
 	EnabledToolsets []string
 
 	// Whether to enable dynamic toolsets
-	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#dynamic-tool-discovery
+	// See: https://gitee.com/masx200/github-mcp-server?tab=readme-ov-file#dynamic-tool-discovery
 	DynamicToolsets bool
 
 	// ReadOnly indicates if we should only offer read-only tools

@@ -15,9 +15,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/github/github-mcp-server/internal/ghmcp"
-	"github.com/github/github-mcp-server/pkg/github"
-	"github.com/github/github-mcp-server/pkg/translations"
+	"gitee.com/masx200/github-mcp-server/internal/ghmcp"
+	"gitee.com/masx200/github-mcp-server/pkg/github"
+	"gitee.com/masx200/github-mcp-server/pkg/translations"
 	gogithub "github.com/google/go-github/v73/github"
 	mcpClient "github.com/mark3labs/mcp-go/client"
 	"github.com/mark3labs/mcp-go/mcp"
