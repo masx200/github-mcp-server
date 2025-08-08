@@ -3,11 +3,13 @@ ARG VERSION="dev"
 
 # Set the working directory
 WORKDIR /build
-
+run sed -i 's#https\?://dl-cdn.alpinelinux.org/alpine#https://mirrors.tuna.tsinghua.edu.cn/alpine#g' /etc/apk/repositories
 # Install git
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add git
 
+env GO111MODULE=on
+env export GOPROXY=https://goproxy.cn
 # Build the server
 # go build automatically download required module dependencies to /go/pkg/mod
 RUN --mount=type=cache,target=/go/pkg/mod \
