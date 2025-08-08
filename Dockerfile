@@ -1,4 +1,4 @@
-FROM golang:1.24.4-alpine AS build
+FROM docker.cnb.cool/masx200/docker_mirror/golang:1.24.4-alpine-linux-amd64 AS build
 ARG VERSION="dev"
 
 # Set the working directory
@@ -17,7 +17,7 @@ RUN --mount=type=cache,target=/go/pkg/mod \
     -o /bin/github-mcp-server cmd/github-mcp-server/main.go
 
 # Make a stage to run the app
-FROM gcr.io/distroless/base-debian12
+FROM docker.cnb.cool/masx200/docker_mirror/distroless-base-debian12:latest-linux-amd64
 # Set the working directory
 WORKDIR /server
 # Copy the binary from the build stage
