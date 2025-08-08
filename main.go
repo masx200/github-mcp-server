@@ -22,6 +22,7 @@ import (
 	"github.com/github/github-mcp-server/pkg/raw"
 	"github.com/github/github-mcp-server/pkg/toolsets"
 	"github.com/github/github-mcp-server/pkg/translations"
+	"github.com/github/github-mcp-server/streamablehttp"
 	gogithub "github.com/google/go-github/v73/github"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/shurcooL/githubv4"
@@ -257,7 +258,8 @@ func main() {
 			}
 		}
 	}
-
+	var httpcmd = streamablehttp.HttpCmdfactory(version)
+	rootCmd.AddCommand(httpcmd)
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Fprintf(os.Stderr, "%v\n", err)
 		os.Exit(1)
