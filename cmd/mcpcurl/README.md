@@ -1,7 +1,7 @@
 # mcpcurl
 
-A CLI tool that dynamically builds commands based on schemas retrieved from MCP servers that can
-be executed against the configured MCP server.
+A CLI tool that dynamically builds commands based on schemas retrieved from MCP
+servers that can be executed against the configured MCP server.
 
 ## Overview
 
@@ -16,21 +16,25 @@ be executed against the configured MCP server.
 ## Installation
 
 ### Prerequisites
+
 - Go 1.21 or later
 - Access to the GitHub MCP Server from either Docker or local build
 
 ### Build from Source
+
 ```bash
 cd cmd/mcpcurl
 go build -o mcpcurl
 ```
 
 ### Using Go Install
+
 ```bash
 go install github.com/github/github-mcp-server/cmd/mcpcurl@latest
 ```
 
 ### Verify Installation
+
 ```bash
 ./mcpcurl --help
 ```
@@ -41,7 +45,8 @@ go install github.com/github/github-mcp-server/cmd/mcpcurl@latest
 mcpcurl --stdio-server-cmd="<command to start MCP server>" <command> [flags]
 ```
 
-The `--stdio-server-cmd` flag is required for all commands and specifies the command to run the MCP server.
+The `--stdio-server-cmd` flag is required for all commands and specifies the
+command to run the MCP server.
 
 ### Available Commands
 
@@ -108,7 +113,6 @@ Flags:
 Global Flags:
       --pretty                    Pretty print MCP response (only for JSON responses) (default true)
       --stdio-server-cmd string   Shell command to invoke MCP server via stdio (required)
-
 ```
 
 Use one of the tools:
@@ -133,7 +137,8 @@ Use one of the tools:
 
 ## Dynamic Commands
 
-All tools provided by the MCP server are automatically available as subcommands under the `tools` command. Each generated command has:
+All tools provided by the MCP server are automatically available as subcommands
+under the `tools` command. Each generated command has:
 
 - Appropriate flags matching the tool's input schema
 - Validation for required parameters
@@ -143,8 +148,10 @@ All tools provided by the MCP server are automatically available as subcommands 
 
 ## How It Works
 
-1. `mcpcurl` makes a JSON-RPC request to the server using the `tools/list` method
+1. `mcpcurl` makes a JSON-RPC request to the server using the `tools/list`
+   method
 2. The server responds with a schema describing all available tools
 3. `mcpcurl` dynamically builds a command structure based on this schema
 4. When a command is executed, arguments are converted to a JSON-RPC request
-5. The request is sent to the server via stdin, and the response is printed to stdout
+5. The request is sent to the server via stdin, and the response is printed to
+   stdout

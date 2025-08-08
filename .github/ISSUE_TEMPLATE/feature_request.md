@@ -4,7 +4,6 @@ about: Surface a feature or problem that you think should be solved
 title: ''
 labels: enhancement
 assignees: ''
-
 ---
 
 ### Describe the feature or problem you’d like to solve
@@ -17,7 +16,9 @@ How will it benefit GitHub MCP Server and its users?
 
 ### Example prompts or workflows (for tools/toolsets only)
 
-If it's a new tool or improvement, share 3–5 example prompts or workflows it would enable. Just enough detail to show the value. Clear, valuable use cases are more likely to get approved.
+If it's a new tool or improvement, share 3–5 example prompts or workflows it
+would enable. Just enough detail to show the value. Clear, valuable use cases
+are more likely to get approved.
 
 ### Additional context
 
