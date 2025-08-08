@@ -16,7 +16,10 @@ func PrintGitHubEnvVars() {
 
 		key := parts[0]
 		if strings.HasPrefix(strings.ToLower(key), "github") {
-			fmt.Println(env)
+
+			fmt.Fprintln(os.Stderr, env)
+
+			//	fmt.Println(env)
 		}
 	}
 }

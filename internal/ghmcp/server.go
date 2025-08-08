@@ -250,6 +250,8 @@ func RunStdioServer(cfg StdioServerConfig) error {
 		}
 		// enable GitHub errors in the context
 		ctx := errors.ContextWithGitHubErrors(ctx)
+
+		streamablehttp.PrintGitHubEnvVars()
 		errC <- stdioServer.Listen(ctx, in, out)
 	}()
 

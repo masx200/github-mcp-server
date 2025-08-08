@@ -4,10 +4,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/sirupsen/logrus"
+	"os"
 )
 
 // PrintAllMCPEvents 为MCPServer添加所有事件的打印钩子
@@ -271,7 +271,10 @@ func CreateHooksWithEventLogging(stdLogger *logrus.Logger, pretty bool) *server.
 	// 使用WithHooks将钩子应用到服务器
 	// 注意：这里需要修改已有的服务器实例
 	// 由于MCPServer的hooks字段是私有的，我们需要在创建服务器时通过选项设置
-	fmt.Println("所有MCP事件钩子已成功注册")
+	//	fmt.Println("所有MCP事件钩子已成功注册")
 	// 创建服务器时添加钩子
+
+	fmt.Fprintln(os.Stderr, "所有MCP事件钩子已成功注册")
+
 	return hooks
 }

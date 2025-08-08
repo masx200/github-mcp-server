@@ -3,19 +3,20 @@ package streamablehttp
 import (
 	"context"
 	"fmt"
-	"io"
-	"log"
-	"net/http"
-	"os"
-	"os/signal"
-	"syscall"
-
 	"gitee.com/masx200/github-mcp-server/pkg/errors"
 	mcplog "gitee.com/masx200/github-mcp-server/pkg/log"
 	"gitee.com/masx200/github-mcp-server/pkg/translations"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/sirupsen/logrus"
 	prefixed "github.com/x-cray/logrus-prefixed-formatter"
+	"io"
+	"log"
+	"net"
+	"net/http"
+	"os"
+	"os/signal"
+	"strconv"
+	"syscall"
 )
 
 func RunhttpServer(cfg HttpServerConfig) error {
@@ -109,9 +110,17 @@ func RunhttpServer(cfg HttpServerConfig) error {
 		errC <- httpServer.Start(cfg.Address)
 	}()
 
+	var addr = cfg.Address
+	fullAddr, err := NormalizeAddress(addr)
+	if err != nil {
+		fmt.Printf("Error parsing %s: %v\n", addr, err)
+		return err
+	}
+	fmt.Printf("Normalized: %s\n", fullAddr)
+
 	// Output github-mcp-server string
-	_, _ = fmt.Fprintf(os.Stderr, "GitHub MCP Server running on http://%s\n", cfg.Address)
-	log.Println("GitHub MCP Server running on http://" + cfg.Address)
+	_, _ = fmt.Fprintf(os.Stderr, "GitHub MCP Server running on http://%s\n", fullAddr)
+	log.Println("GitHub MCP Server running on http://" + fullAddr)
 
 	PrintGitHubEnvVars()
 
@@ -126,4 +135,35 @@ func RunhttpServer(cfg HttpServerConfig) error {
 	}
 
 	return nil
+}
+
+// NormalizeAddress 将输入地址解析为标准化格式 "ip:port"
+func NormalizeAddress(addr string) (string, error) {
+	// 分割主机和端口
+	host, port, err := net.SplitHostPort(addr)
+	if err != nil {
+		return "", fmt.Errorf("invalid address format: %w", err)
+	}
+
+	// 处理端口合法性
+	if _, err := strconv.ParseUint(port, 10, 16); err != nil {
+		return "", fmt.Errorf("invalid port: %s", port)
+	}
+
+	// 处理主机部分（IP或空）
+	var ipStr string
+	switch {
+	case host == "":
+		ipStr = "0.0.0.0" // 空IP表示监听所有接口
+	default:
+		// 尝试解析为IP地址
+		ip := net.ParseIP(host)
+		if ip == nil {
+			return "", fmt.Errorf("invalid IP: %s", host)
+		}
+		ipStr = ip.String() // 标准化IP格式（如IPv6压缩表示）
+	}
+
+	// 组合为标准格式
+	return net.JoinHostPort(ipStr, port), nil
 }

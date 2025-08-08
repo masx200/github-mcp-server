@@ -31,6 +31,9 @@ func NewMCPServer(cfg MCPServerConfig, otherhooks ...*server.Hooks) (*server.MCP
 	// We're using NewEnterpriseClient here unconditionally as opposed to NewClient because we already
 	// did the necessary API host parsing so that github.com will return the correct URL anyway.
 	gqlHTTPClient := &http.Client{
+
+		Transport: http.DefaultTransport,
+
 		//bearerAuthTransport移到getGQLClient处理
 		// Transport: &bearerAuthTransport{
 		// 	transport: http.DefaultTransport,
@@ -102,8 +105,9 @@ func NewMCPServer(cfg MCPServerConfig, otherhooks ...*server.Hooks) (*server.MCP
 		var httpClient = &http.Client{
 			//bearerAuthTransport移到getGQLClient处理
 			Transport: &bearerAuthTransport{
-				transport: http.DefaultTransport,
-				token:     token,
+				transport: gqlHTTPClient.Transport,
+				//http.DefaultTransport,
+				token: token,
 			},
 		}
 		var gqlClientWithAuth = gqlClient.WithClient(httpClient)
