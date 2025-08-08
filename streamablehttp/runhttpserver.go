@@ -24,19 +24,6 @@ func RunhttpServer(cfg HttpServerConfig) error {
 
 	t, dumpTranslations := translations.TranslationHelper()
 
-	ghServer, err := NewMCPServer(MCPServerConfig{
-		Version:         cfg.Version,
-		Host:            cfg.Host,
-		Token:           cfg.Token,
-		EnabledToolsets: cfg.EnabledToolsets,
-		DynamicToolsets: cfg.DynamicToolsets,
-		ReadOnly:        cfg.ReadOnly,
-		Translator:      t,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to create MCP server: %w", err)
-	}
-
 	logrusLogger := logrus.New()
 	if cfg.LogFilePath != "" {
 		file, err := os.OpenFile(cfg.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
@@ -48,12 +35,26 @@ func RunhttpServer(cfg HttpServerConfig) error {
 		logrusLogger.SetOutput(file)
 	}
 	stdLogger := log.New(logrusLogger.Writer(), "httpserver", 0)
+
+	ghServer, err := NewMCPServer(MCPServerConfig{
+		Version:         cfg.Version,
+		Host:            cfg.Host,
+		Token:           cfg.Token,
+		EnabledToolsets: cfg.EnabledToolsets,
+		DynamicToolsets: cfg.DynamicToolsets,
+		ReadOnly:        cfg.ReadOnly,
+		Translator:      t,
+	}, CreateHooksWithEventLogging(stdLogger))
+
+	if err != nil {
+		return fmt.Errorf("failed to create MCP server: %w", err)
+	}
+
 	httpServer := server.NewStreamableHTTPServer(ghServer,
 		server.WithHTTPContextFunc(authFromRequest),
 		server.WithLogger(NewLoggerAdapter(stdLogger)),
 		server.WithHTTPContextFunc(func(ctx context.Context, r *http.Request) context.Context {
 
-			
 			return errors.ContextWithGitHubErrors(ctx)
 
 		}),

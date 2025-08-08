@@ -14,7 +14,7 @@ import (
 	"github.com/shurcooL/githubv4"
 )
 
-func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
+func NewMCPServer(cfg MCPServerConfig, otherhooks *server.Hooks) (*server.MCPServer, error) {
 	apiHost, err := parseAPIHost(cfg.Host)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse API host: %w", err)
@@ -66,8 +66,10 @@ func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
 			},
 		},
 	}
+	opts := []server.ServerOption{server.WithHooks(MergeHooksVariadic(hooks, otherhooks))}
+	ghServer := github.NewServer(cfg.Version,
 
-	ghServer := github.NewServer(cfg.Version, server.WithHooks(hooks))
+		opts...)
 
 	enabledToolsets := cfg.EnabledToolsets
 	if cfg.DynamicToolsets {
