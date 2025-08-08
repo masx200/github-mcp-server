@@ -3,25 +3,11 @@ package streamablehttp
 import (
 	"context"
 	"fmt"
-	"io"
-	"log"
 	"net/http"
 	"net/url"
-	"os"
-	"os/signal"
 	"strings"
-	"syscall"
 
-	"github.com/github/github-mcp-server/pkg/errors"
-	"github.com/github/github-mcp-server/pkg/github"
-	mcplog "github.com/github/github-mcp-server/pkg/log"
-	"github.com/github/github-mcp-server/pkg/raw"
 	"github.com/github/github-mcp-server/pkg/translations"
-	gogithub "github.com/google/go-github/v73/github"
-	"github.com/mark3labs/mcp-go/mcp"
-	"github.com/mark3labs/mcp-go/server"
-	"github.com/shurcooL/githubv4"
-	"github.com/sirupsen/logrus"
 )
 
 type HttpServerConfig struct {
@@ -105,83 +91,6 @@ func authFromRequest(ctx context.Context, r *http.Request) context.Context {
 	var Token = strings.TrimPrefix(Authorization, "Bearer ")
 
 	return withAuthKey(ctx, Token)
-}
-func RunhttpServer(cfg HttpServerConfig) error {
-	// Create app context
-	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
-	defer stop()
-
-	t, dumpTranslations := translations.TranslationHelper()
-
-	ghServer, err := NewMCPServer(MCPServerConfig{
-		Version:         cfg.Version,
-		Host:            cfg.Host,
-		Token:           cfg.Token,
-		EnabledToolsets: cfg.EnabledToolsets,
-		DynamicToolsets: cfg.DynamicToolsets,
-		ReadOnly:        cfg.ReadOnly,
-		Translator:      t,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to create MCP server: %w", err)
-	}
-
-	logrusLogger := logrus.New()
-	if cfg.LogFilePath != "" {
-		file, err := os.OpenFile(cfg.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
-		if err != nil {
-			return fmt.Errorf("failed to open log file: %w", err)
-		}
-
-		logrusLogger.SetLevel(logrus.DebugLevel)
-		logrusLogger.SetOutput(file)
-	}
-	stdLogger := log.New(logrusLogger.Writer(), "httpserver", 0)
-	httpServer := server.NewStreamableHTTPServer(ghServer,
-		server.WithHTTPContextFunc(authFromRequest),
-		server.WithLogger(NewLoggerAdapter(stdLogger)),
-		server.WithHTTPContextFunc(func(ctx context.Context, r *http.Request) context.Context {
-			return errors.ContextWithGitHubErrors(ctx)
-
-		}),
-	)
-
-	// httpServer.SetLogger(stdLogger)
-
-	if cfg.ExportTranslations {
-		// Once server is initialized, all translations are loaded
-		dumpTranslations()
-	}
-
-	// Start listening for messages
-	errC := make(chan error, 1)
-	go func() {
-		in, out := io.Reader(os.Stdin), io.Writer(os.Stdout)
-
-		if cfg.EnableCommandLogging {
-			loggedIO := mcplog.NewIOLogger(in, out, logrusLogger)
-			in, out = loggedIO, loggedIO
-		}
-		// enable GitHub errors in the context
-
-		// errC <- httpServer.Listen(ctx, in, out)
-		errC <- httpServer.Start(cfg.Address)
-	}()
-
-	// Output github-mcp-server string
-	_, _ = fmt.Fprintf(os.Stderr, "GitHub MCP Server running on http\n")
-
-	// Wait for shutdown signal
-	select {
-	case <-ctx.Done():
-		logrusLogger.Infof("shutting down server...")
-	case err := <-errC:
-		if err != nil {
-			return fmt.Errorf("error running server: %w", err)
-		}
-	}
-
-	return nil
 }
 
 type apiHost struct {
@@ -319,106 +228,7 @@ func newDotcomHost() (apiHost, error) {
 
 type bearerAuthTransport struct {
 	transport http.RoundTripper
-	token     func(ctx context.Context) (string, error)
-}
-
-func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
-	apiHost, err := parseAPIHost(cfg.Host)
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse API host: %w", err)
-	}
-
-	// Construct our REST client
-	restClient := gogithub.NewClient(nil).WithAuthToken(cfg.Token)
-	restClient.UserAgent = fmt.Sprintf("github-mcp-server/%s", cfg.Version)
-	restClient.BaseURL = apiHost.baseRESTURL
-	restClient.UploadURL = apiHost.uploadURL
-
-	// Construct our GraphQL client
-	// We're using NewEnterpriseClient here unconditionally as opposed to NewClient because we already
-	// did the necessary API host parsing so that github.com will return the correct URL anyway.
-	gqlHTTPClient := &http.Client{
-		Transport: &bearerAuthTransport{
-			transport: http.DefaultTransport,
-			token:     cfg.Token,
-		},
-	} // We're going to wrap the Transport later in beforeInit
-	gqlClient := githubv4.NewEnterpriseClient(apiHost.graphqlURL.String(), gqlHTTPClient)
-
-	// When a client send an initialize request, update the user agent to include the client info.
-	beforeInit := func(_ context.Context, _ any, message *mcp.InitializeRequest) {
-		userAgent := fmt.Sprintf(
-			"github-mcp-server/%s (%s/%s)",
-			cfg.Version,
-			message.Params.ClientInfo.Name,
-			message.Params.ClientInfo.Version,
-		)
-
-		restClient.UserAgent = userAgent
-
-		gqlHTTPClient.Transport = &userAgentTransport{
-			transport: gqlHTTPClient.Transport,
-			agent:     userAgent,
-		}
-	}
-
-	hooks := &server.Hooks{
-		OnBeforeInitialize: []server.OnBeforeInitializeFunc{beforeInit},
-		OnBeforeAny: []server.BeforeAnyHookFunc{
-			func(ctx context.Context, _ any, _ mcp.MCPMethod, _ any) {
-				// Ensure the context is cleared of any previous errors
-				// as context isn't propagated through middleware
-				errors.ContextWithGitHubErrors(ctx)
-			},
-		},
-	}
-
-	ghServer := github.NewServer(cfg.Version, server.WithHooks(hooks))
-
-	enabledToolsets := cfg.EnabledToolsets
-	if cfg.DynamicToolsets {
-		// filter "all" from the enabled toolsets
-		enabledToolsets = make([]string, 0, len(cfg.EnabledToolsets))
-		for _, toolset := range cfg.EnabledToolsets {
-			if toolset != "all" {
-				enabledToolsets = append(enabledToolsets, toolset)
-			}
-		}
-	}
-
-	getClient := func(_ context.Context) (*gogithub.Client, error) {
-		return restClient, nil // closing over client
-	}
-
-	getGQLClient := func(_ context.Context) (*githubv4.Client, error) {
-		return gqlClient, nil // closing over client
-	}
-
-	getRawClient := func(ctx context.Context) (*raw.Client, error) {
-		client, err := getClient(ctx)
-		if err != nil {
-			return nil, fmt.Errorf("failed to get GitHub client: %w", err)
-		}
-		return raw.NewClient(client, apiHost.rawURL), nil // closing over client
-	}
-
-	// Create default toolsets
-	tsg := github.DefaultToolsetGroup(cfg.ReadOnly, getClient, getGQLClient, getRawClient, cfg.Translator)
-	err = tsg.EnableToolsets(enabledToolsets)
-
-	if err != nil {
-		return nil, fmt.Errorf("failed to enable toolsets: %w", err)
-	}
-
-	// Register all mcp functionality with the server
-	tsg.RegisterAll(ghServer)
-
-	if cfg.DynamicToolsets {
-		dynamic := github.InitDynamicToolset(ghServer, tsg, cfg.Translator)
-		dynamic.RegisterTools(ghServer)
-	}
-
-	return ghServer, nil
+	token     string
 }
 
 type userAgentTransport struct {
