@@ -52,6 +52,8 @@ func RunhttpServer(cfg HttpServerConfig) error {
 		server.WithHTTPContextFunc(authFromRequest),
 		server.WithLogger(NewLoggerAdapter(stdLogger)),
 		server.WithHTTPContextFunc(func(ctx context.Context, r *http.Request) context.Context {
+
+			
 			return errors.ContextWithGitHubErrors(ctx)
 
 		}),
@@ -82,6 +84,9 @@ func RunhttpServer(cfg HttpServerConfig) error {
 	// Output github-mcp-server string
 	_, _ = fmt.Fprintf(os.Stderr, "GitHub MCP Server running on http://%s\n", cfg.Address)
 	log.Println("GitHub MCP Server running on http://" + cfg.Address)
+
+	PrintGitHubEnvVars()
+
 	// Wait for shutdown signal
 	select {
 	case <-ctx.Done():
