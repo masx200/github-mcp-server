@@ -80,8 +80,8 @@ func RunhttpServer(cfg HttpServerConfig) error {
 	}()
 
 	// Output github-mcp-server string
-	_, _ = fmt.Fprintf(os.Stderr, "GitHub MCP Server running on http\n")
-
+	_, _ = fmt.Fprintf(os.Stderr, "GitHub MCP Server running on http://%s\n", cfg.Address)
+	log.Println("GitHub MCP Server running on http://" + cfg.Address)
 	// Wait for shutdown signal
 	select {
 	case <-ctx.Done():

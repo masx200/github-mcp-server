@@ -19,7 +19,7 @@ func tokenFromContext(ctx context.Context) (string, error) {
 func HttpCmdfactory(version string) *cobra.Command {
 	var httpCmd = &cobra.Command{
 		Use:   "http",
-		Short: "Start http server",
+		Short: "Start streamable http server",
 		Long:  `Start a server that communicates via http streams using JSON-RPC messages.`,
 		RunE: func(_ *cobra.Command, _ []string) error {
 
