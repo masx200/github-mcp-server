@@ -343,6 +343,16 @@ configure your server to use the built executable as its `command`. For example:
 }
 ```
 
+## start server using streamable-http mode
+
+You can also run the server using streamable-http mode:
+
+```bash
+go run -v ./main.go http --address ":38888"
+```
+
+This will start the server on port 38888 using streamable-http transport.
+
 ## Tool Configuration
 
 The GitHub MCP Server supports enabling or disabling specific groups of
