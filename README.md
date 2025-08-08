@@ -1,3 +1,502 @@
+# GitHub MCP 服务器
+
+GitHub MCP 服务器将 AI 工具直接连接到 GitHub 平台。这使得 AI
+代理、助手和聊天机器人能够读取仓库和代码文件、管理问题和
+PR、分析代码并自动化工作流程。所有操作都通过自然语言交互完成。
+
+### 使用场景
+
+- **仓库管理**：浏览和查询代码、搜索文件、分析提交记录，并了解您有权访问的任何仓库的项目结构。
+- **问题与 PR 自动化**：创建、更新和管理问题与拉取请求。让 AI
+  帮助分类错误、审查代码更改和维护项目面板。
+- **CI/CD 与工作流程智能**：监控 GitHub Actions
+  工作流程运行、分析构建失败、管理发布，并获取开发流水线的洞察。
+- **代码分析**：检查安全发现、审查 Dependabot
+  警报、理解代码模式，并获取代码库的全面洞察。
+- **团队协作**：访问讨论、管理通知、分析团队活动，并为您的团队简化流程。
+
+为希望将 AI 工具连接到 GitHub
+上下文和功能的开发者构建，从简单的自然语言查询到复杂的多步骤代理工作流程。
+
+---
+
+## 远程 GitHub MCP 服务器
+
+[![在 VS Code 中安装](https://img.shields.io/badge/VS_Code-安装服务器-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=github&config=%7B%22type%22%3A%20%22http%22%2C%22url%22%3A%20%22https%3A%2F%2Fapi.githubcopilot.com%2Fmcp%2F%22%7D)
+[![在 VS Code Insiders 中安装](https://img.shields.io/badge/VS_Code_Insiders-安装服务器-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=github&config=%7B%22type%22%3A%20%22http%22%2C%22url%22%3A%20%22https%3A%2F%2Fapi.githubcopilot.com%2Fmcp%2F%22%7D&quality=insiders)
+
+远程 GitHub MCP 服务器由 GitHub 托管，提供最简单的入门方法。如果您的 MCP
+主机不支持远程 MCP
+服务器，不用担心！您可以使用[本地版本的 GitHub MCP 服务器](https://gitee.com/masx200/github-mcp-server?tab=readme-ov-file#local-github-mcp-server)。
+
+### 前提条件
+
+1. 支持远程服务器的兼容 MCP 主机（VS Code 1.101+、Claude
+   Desktop、Cursor、Windsurf 等）
+2. 任何适用的[策略已启用](https://gitee.com/masx200/github-mcp-server/blob/main/docs/policies-and-governance.md)
+
+### 在 VS Code 中安装
+
+快速安装，请使用上方的一键安装按钮之一。完成该流程后，切换代理模式（位于 Copilot
+Chat
+文本输入框旁），服务器将启动。确保您使用[VS Code 1.101](https://code.visualstudio.com/updates/v1_101)或更高版本以获得远程
+MCP 和 OAuth 支持。
+
+或者，要手动配置 VS Code，请从以下示例中选择适当的 JSON
+块并添加到您的主机配置中：
+
+<table>
+<tr><th>使用 OAuth</th><th>使用 GitHub PAT</th></tr>
+<tr><th align=left colspan=2>VS Code（1.101 或更高版本）</th></tr>
+<tr valign=top>
+<td>
+
+```json
+{
+  "servers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  }
+}
+```
+
+</td>
+<td>
+
+```json
+{
+  "servers": {
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer ${input:github_mcp_pat}"
+      }
+    }
+  },
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "github_mcp_pat",
+      "description": "GitHub 个人访问令牌",
+      "password": true
+    }
+  ]
+}
+```
+
+</td>
+</tr>
+</table>
+
+### 在其他 MCP 主机中安装
+
+- **[其他 IDE 中的 GitHub Copilot](/docs/installation-guides/install-other-copilot-ides.md)** -
+  JetBrains、Visual Studio、Eclipse 和 Xcode 的 GitHub Copilot 安装
+- **[Claude 应用程序](/docs/installation-guides/install-claude.md)** - Claude
+  Web、Claude Desktop 和 Claude Code CLI 的安装指南
+- **[Cursor](/docs/installation-guides/install-cursor.md)** - Cursor IDE
+  的安装指南
+- **[Windsurf](/docs/installation-guides/install-windsurf.md)** - Windsurf IDE
+  的安装指南
+
+> **注意：** 每个 MCP 主机应用程序需要配置 GitHub App 或 OAuth App 以支持通过
+> OAuth 的远程访问。任何支持远程 MCP 服务器的主机应用程序都应该支持使用 PAT
+> 认证的远程 GitHub
+> 服务器。配置细节和支持级别因主机而异。请务必参考主机应用程序的文档获取更多信息。
+
+> ⚠️ **公开预览状态：** **远程** GitHub MCP
+> 服务器目前处于公开预览阶段。在预览期间，访问可能根据认证类型和界面进行限制：
+>
+> - OAuth：在 GA 之前受 GitHub Copilot 编辑器预览策略约束
+> - PAT：通过您组织的 PAT 策略控制
+> - MCP 服务器在 Copilot 策略中：启用/禁用 VS Code 中的所有 MCP 服务器访问，其他
+>   Copilot 编辑器将在未来几个月迁移到此策略
+
+### 配置
+
+有关如何向远程 GitHub MCP
+服务器传递额外配置设置的信息，请参阅[远程服务器文档](/docs/remote-server.md)。
+
+---
+
+## 本地 GitHub MCP 服务器
+
+[![在 VS Code 中使用 Docker 安装](https://img.shields.io/badge/VS_Code-安装服务器-0098FF?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=github&inputs=%5B%7B%22id%22%3A%22github_token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitHub%20个人访问令牌%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22-e%22%2C%22GITHUB_PERSONAL_ACCESS_TOKEN%22%2C%22ghcr.io%2Fgithub%2Fgithub-mcp-server%22%5D%2C%22env%22%3A%7B%22GITHUB_PERSONAL_ACCESS_TOKEN%22%3A%22%24%7Binput%3Agithub_token%7D%22%7D%7D)
+[![在 VS Code Insiders 中使用 Docker 安装](https://img.shields.io/badge/VS_Code_Insiders-安装服务器-24bfa5?style=flat-square&logo=visualstudiocode&logoColor=white)](https://insiders.vscode.dev/redirect/mcp/install?name=github&inputs=%5B%7B%22id%22%3A%22github_token%22%2C%22type%22%3A%22promptString%22%2C%22description%22%3A%22GitHub%20个人访问令牌%22%2C%22password%22%3Atrue%7D%5D&config=%7B%22command%22%3A%22docker%22%2C%22args%22%3A%5B%22run%22%2C%22-i%22%2C%22--rm%22%2C%22-e%22%2C%22GITHUB_PERSONAL_ACCESS_TOKEN%22%2C%22ghcr.io%2Fgithub%2Fgithub-mcp-server%22%5D%2C%22env%22%3A%7B%22GITHUB_PERSONAL_ACCESS_TOKEN%22%3A%22%24%7Binput%3Agithub_token%7D%22%7D%7D&quality=insiders)
+
+### 前提条件
+
+1. 要在容器中运行服务器，您需要安装 [Docker](https://www.docker.com/)。
+2. 安装 Docker 后，您还需要确保 Docker
+   正在运行。镜像是公开的；如果在拉取时遇到错误，您可能有过期的令牌，需要
+   `docker logout ghcr.io`。
+3. 最后，您需要[创建 GitHub 个人访问令牌](https://github.com/settings/personal-access-tokens/new)。MCP
+   服务器可以使用许多 GitHub API，因此启用您愿意授予 AI
+   工具的权限（要了解更多关于访问令牌的信息，请查看[文档](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens)）。
+
+<details><summary><b>安全处理 PAT</b></summary>
+
+### 环境变量（推荐）
+
+为了保持您的 GitHub PAT 安全并在不同的 MCP 主机中重复使用：
+
+1. **将您的 PAT 存储在环境变量中**
+
+   ```bash
+   export GITHUB_PAT=your_token_here
+   ```
+
+   或创建 `.env` 文件：
+
+   ```env
+   GITHUB_PAT=your_token_here
+   ```
+
+2. **保护您的 `.env` 文件**
+
+   ```bash
+   # 添加到 .gitignore 以防止意外提交
+   echo ".env" >> .gitignore
+   ```
+
+3. **在配置中引用令牌**
+
+   ```bash
+   # CLI 使用
+   claude mcp update github -e GITHUB_PERSONAL_ACCESS_TOKEN=$GITHUB_PAT
+
+   # 在配置文件中（在支持的地方）
+   "env": {
+     "GITHUB_PERSONAL_ACCESS_TOKEN": "$GITHUB_PAT"
+   }
+   ```
+
+> **注意**：环境变量支持因主机应用和 IDE 而异。某些应用程序（如
+> Windsurf）需要在配置文件中硬编码令牌。
+
+### 令牌安全最佳实践
+
+- **最小权限**：仅授予必要的权限
+  - `repo` - 仓库操作
+  - `read:packages` - Docker 镜像访问
+- **分离令牌**：为不同项目/环境使用不同的 PAT
+- **定期轮换**：定期更新令牌
+- **永不提交**：将令牌排除在版本控制之外
+- **文件权限**：限制对包含令牌的配置文件的访问
+  ```bash
+  chmod 600 ~/.your-app/config.json
+  ```
+
+</details>
+
+## 安装
+
+### 在 GitHub Copilot on VS Code 中安装
+
+快速安装，请使用上方的一键安装按钮之一。完成该流程后，切换代理模式（位于 Copilot
+Chat 文本输入框旁），服务器将启动。
+
+更多关于在 VS Code 中使用 MCP
+服务器工具的信息，请参阅[代理模式文档](https://code.visualstudio.com/docs/copilot/chat/mcp-servers)。
+
+在其他 IDE（JetBrains、Visual Studio、Eclipse 等）的 GitHub Copilot 中安装
+
+将以下 JSON 块添加到您 IDE 的 MCP 设置中。
+
+```json
+{
+  "mcp": {
+    "inputs": [
+      {
+        "type": "promptString",
+        "id": "github_token",
+        "description": "GitHub 个人访问令牌",
+        "password": true
+      }
+    ],
+    "servers": {
+      "github": {
+        "command": "docker",
+        "args": [
+          "run",
+          "-i",
+          "--rm",
+          "-e",
+          "GITHUB_PERSONAL_ACCESS_TOKEN",
+          "ghcr.io/github/github-mcp-server"
+        ],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
+        }
+      }
+    }
+  }
+}
+```
+
+可选地，您可以将类似的示例（即不包含 mcp 键）添加到工作区中的 `.vscode/mcp.json`
+文件中。这将允许您与其他接受相同格式的主机应用程序共享配置。
+
+<details>
+<summary><b>不包含 MCP 键的示例 JSON 块</b></summary>
+<br>
+
+```json
+{
+  "inputs": [
+    {
+      "type": "promptString",
+      "id": "github_token",
+      "description": "GitHub 个人访问令牌",
+      "password": true
+    }
+  ],
+  "servers": {
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github_token}"
+      }
+    }
+  }
+}
+```
+
+</details>
+
+### 在其他 MCP 主机中安装
+
+对于其他 MCP 主机应用程序，请参阅我们的安装指南：
+
+- **[其他 IDE 中的 GitHub Copilot](/docs/installation-guides/install-other-copilot-ides.md)** -
+  JetBrains、Visual Studio、Eclipse 和 Xcode 的 GitHub Copilot 安装
+- **[Claude Code 和 Claude Desktop](docs/installation-guides/install-claude.md)** -
+  Claude Code 和 Claude Desktop 的安装指南
+- **[Cursor](/docs/installation-guides/install-cursor.md)** - Cursor IDE
+  的安装指南
+- **[Windsurf](/docs/installation-guides/install-windsurf.md)** - Windsurf IDE
+  的安装指南
+
+有关所有安装选项的完整概述，请参阅我们的**[安装指南索引](docs/installation-guides/installation-guides.md)**。
+
+> **注意：** 任何支持本地 MCP 服务器的主机应用程序都应该能够访问本地 GitHub MCP
+> 服务器。但是，具体的配置过程、语法和集成的稳定性将因主机应用程序而异。虽然许多可能遵循与上述示例类似的格式，但这不能保证。请参考您的主机应用程序的文档以获取正确的
+> MCP 配置语法和设置过程。
+
+### 从源代码构建
+
+如果您没有 Docker，您可以使用 `go build` 在 `cmd/github-mcp-server`
+目录中构建二进制文件，并使用 `github-mcp-server stdio` 命令，并将
+`GITHUB_PERSONAL_ACCESS_TOKEN`
+环境变量设置为您的令牌。要指定构建的输出位置，请使用 `-o`
+标志。您应该配置您的服务器以使用构建的可执行文件作为其 `command`。例如：
+
+```JSON
+{
+  "mcp": {
+    "servers": {
+      "github": {
+        "command": "/path/to/github-mcp-server",
+        "args": ["stdio"],
+        "env": {
+          "GITHUB_PERSONAL_ACCESS_TOKEN": "<YOUR_TOKEN>"
+        }
+      }
+    }
+  }
+}
+```
+
+## 使用 streamable-http 模式启动服务器
+
+您还可以使用 streamable-http 模式运行服务器：
+
+```bash
+go run -v ./main.go http --address ":38888"
+```
+
+或者
+
+```bash
+go build -v ./main.go
+
+./main.exe http --address ":38888"
+```
+
+这将在端口 38888 上使用 streamable-http 传输启动服务器。
+
+### 日志格式控制
+
+服务器支持通过 `--pretty` 命令行参数控制日志输出格式：
+
+- `--pretty=false`：输出压缩的 JSON 格式日志（单行，无缩进）
+- `--pretty=true`：输出美化的 JSON 格式日志（多行，带缩进和换行）
+
+示例：
+
+```bash
+# 使用压缩 JSON 日志格式
+go run -v ./main.go http --address ":38888" --pretty=false
+
+# 使用美化 JSON 日志格式（默认）
+go run -v ./main.go http --address ":38888" --pretty=true
+```
+
+## 工具配置
+
+GitHub MCP 服务器支持通过 `--toolsets` 标志启用或禁用特定功能组。这允许您控制 AI
+工具可用的 GitHub API 功能。仅启用您需要的工具集可以帮助 LLM
+进行工具选择并减少上下文大小。
+
+_工具集不仅限于工具。相关的 MCP 资源和提示也包含在适用的地方。_
+
+### 可用工具集
+
+以下工具集可用（默认全部开启）：
+
+<!-- START AUTOMATED TOOLSETS -->
+
+| 工具集              | 描述                                                             |
+| ------------------- | ---------------------------------------------------------------- |
+| `context`           | **强烈推荐**：提供关于当前用户和您正在操作的 GitHub 上下文的工具 |
+| `actions`           | GitHub Actions 工作流程和 CI/CD 操作                             |
+| `code_security`     | 代码安全相关工具，如 GitHub 代码扫描                             |
+| `dependabot`        | Dependabot 工具                                                  |
+| `discussions`       | GitHub 讨论相关工具                                              |
+| `experiments`       | 尚未被视为稳定的实验性功能                                       |
+| `gists`             | GitHub Gist 相关工具                                             |
+| `issues`            | GitHub 问题相关工具                                              |
+| `notifications`     | GitHub 通知相关工具                                              |
+| `orgs`              | GitHub 组织相关工具                                              |
+| `pull_requests`     | GitHub 拉取请求相关工具                                          |
+| `repos`             | GitHub 仓库相关工具                                              |
+| `secret_protection` | 密钥保护相关工具，如 GitHub 密钥扫描                             |
+| `users`             | GitHub 用户相关工具                                              |
+
+<!-- END AUTOMATED TOOLSETS -->
+
+## 工具
+
+<!-- START AUTOMATED TOOLS -->
+<details>
+
+<summary>操作</summary>
+
+- **cancel_workflow_run** - 取消工作流程运行
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **delete_workflow_run_logs** - 删除工作流程日志
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **download_workflow_run_artifact** - 下载工作流程构件
+
+  - `artifact_id`: 构件的唯一标识符（数字，必需）
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+
+- **get_job_logs** - 获取作业日志
+
+  - `failed_only`: 当为 true 时，获取 run_id
+    中所有失败作业的日志（布尔值，可选）
+  - `job_id`: 工作流程作业的唯一标识符（单个作业日志必需）（数字，可选）
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `return_content`: 返回实际日志内容而不是 URL（布尔值，可选）
+  - `run_id`: 工作流程运行 ID（使用 failed_only 时必需）（数字，可选）
+  - `tail_lines`: 从日志末尾返回的行数（数字，可选）
+
+- **get_workflow_run** - 获取工作流程运行
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **get_workflow_run_logs** - 获取工作流程运行日志
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **get_workflow_run_usage** - 获取工作流程使用情况
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **list_workflow_jobs** - 列出工作流程作业
+
+  - `filter`: 根据 completed_at 时间戳过滤作业（字符串，可选）
+  - `owner`: 仓库所有者（字符串，必需）
+  - `page`: 分页页码（最小 1）（数字，可选）
+  - `perPage`: 分页每页结果数（最小 1，最大 100）（数字，可选）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **list_workflow_run_artifacts** - 列出工作流程构件
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `page`: 分页页码（最小 1）（数字，可选）
+  - `perPage`: 分页每页结果数（最小 1，最大 100）（数字，可选）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **list_workflow_runs** - 列出工作流程运行
+
+  - `actor`:
+    返回某人的工作流程运行。使用创建工作流程运行的用户的登录名。（字符串，可选）
+  - `branch`: 返回与分支关联的工作流程运行。使用分支名称。（字符串，可选）
+  - `event`: 返回特定事件类型的工作流程运行（字符串，可选）
+  - `owner`: 仓库所有者（字符串，必需）
+  - `page`: 分页页码（最小 1）（数字，可选）
+  - `perPage`: 分页每页结果数（最小 1，最大 100）（数字，可选）
+  - `repo`: 仓库名称（字符串，必需）
+  - `status`: 返回具有检查运行状态的工作流程运行（字符串，可选）
+  - `workflow_id`: 工作流程 ID 或工作流程文件名（字符串，必需）
+
+- **list_workflows** - 列出工作流程
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `page`: 分页页码（最小 1）（数字，可选）
+  - `perPage`: 分页每页结果数（最小 1，最大 100）（数字，可选）
+  - `repo`: 仓库名称（字符串，必需）
+
+- **rerun_failed_jobs** - 重新运行失败的作业
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **rerun_workflow_run** - 重新运行工作流程
+
+  - `owner`: 仓库所有者（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `run_id`: 工作流程运行的唯一标识符（数字，必需）
+
+- **run_workflow** - 运行工作流程
+  - `inputs`: 工作流程接受的输入（对象，可选）
+  - `owner`: 仓库所有者（字符串，必需）
+  - `ref`: 工作流程的 git 引用。引用可以是分支或标签名称。（字符串，必需）
+  - `repo`: 仓库名称（字符串，必需）
+  - `workflow_id`: 工作流程 ID 或工作流程文件名（字符串，必需）
+
+</details>
 # GitHub MCP Server
 
 The GitHub MCP Server connects AI tools directly to GitHub's platform. This
