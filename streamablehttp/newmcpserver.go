@@ -31,12 +31,13 @@ func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
 	// We're using NewEnterpriseClient here unconditionally as opposed to NewClient because we already
 	// did the necessary API host parsing so that github.com will return the correct URL anyway.
 	gqlHTTPClient := &http.Client{
-		Transport: &bearerAuthTransport{
-			transport: http.DefaultTransport,
-			token:     cfg.Token,
-		},
+		//bearerAuthTransport移到getGQLClient处理
+		// Transport: &bearerAuthTransport{
+		// 	transport: http.DefaultTransport,
+		// 	token:     cfg.Token,
+		// },
 	} // We're going to wrap the Transport later in beforeInit
-	gqlClient := githubv4.NewEnterpriseClient(apiHost.graphqlURL.String(), gqlHTTPClient)
+	gqlClient := NewEnterpriseClient(apiHost.graphqlURL.String(), gqlHTTPClient)
 
 	// When a client send an initialize request, update the user agent to include the client info.
 	beforeInit := func(_ context.Context, _ any, message *mcp.InitializeRequest) {
@@ -84,12 +85,27 @@ func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
 		if err != nil {
 			return nil, fmt.Errorf("failed to get token: %w", err)
 		}
+		//WithAuthToken移到getClient中
 		var restClientWithAuth = restClient.WithAuthToken(token)
 		return restClientWithAuth, nil // closing over client
 	}
 
-	getGQLClient := func(_ context.Context) (*githubv4.Client, error) {
-		return gqlClient, nil // closing over client
+	getGQLClient := func(ctx context.Context) (*githubv4.Client, error) {
+		token, err := cfg.Token(ctx)
+		if err != nil {
+			return nil, fmt.Errorf("failed to get token: %w", err)
+		}
+
+		var httpClient = &http.Client{
+			//bearerAuthTransport移到getGQLClient处理
+			Transport: &bearerAuthTransport{
+				transport: http.DefaultTransport,
+				token:     token,
+			},
+		}
+		var gqlClientWithAuth = gqlClient.WithClient(httpClient)
+		//bearerAuthTransport移到getGQLClient处理
+		return githubv4.NewEnterpriseClient(gqlClientWithAuth.url, gqlClientWithAuth.httpClient), nil // closing over client
 	}
 
 	getRawClient := func(ctx context.Context) (*raw.Client, error) {
