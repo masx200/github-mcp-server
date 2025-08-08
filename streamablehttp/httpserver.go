@@ -32,7 +32,7 @@ type HttpServerConfig struct {
 	Host string
 
 	// GitHub Token to authenticate with the GitHub API
-	Token string
+	Token func(ctx context.Context) (string, error)
 
 	// EnabledToolsets is a list of toolsets to enable
 	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#tool-configuration
@@ -64,7 +64,7 @@ type MCPServerConfig struct {
 	Host string
 
 	// GitHub Token to authenticate with the GitHub API
-	Token string
+	Token func(ctx context.Context) (string, error)
 
 	// EnabledToolsets is a list of toolsets to enable
 	// See: https://github.com/github/github-mcp-server?tab=readme-ov-file#tool-configuration
@@ -89,7 +89,19 @@ func withAuthKey(ctx context.Context, auth string) context.Context {
 }
 
 func authFromRequest(ctx context.Context, r *http.Request) context.Context {
-	return withAuthKey(ctx, r.Header.Get("Authorization"))
+	Authorization := r.Header.Get("Authorization")
+
+	if Authorization == "" {
+		return ctx
+	}
+
+	if !strings.HasPrefix(Authorization, "Bearer ") {
+		return ctx
+	}
+
+	var Token = strings.TrimPrefix(Authorization, "Bearer ")
+
+	return withAuthKey(ctx, Token)
 }
 func RunhttpServer(cfg HttpServerConfig) error {
 	// Create app context
@@ -304,7 +316,7 @@ func newDotcomHost() (apiHost, error) {
 
 type bearerAuthTransport struct {
 	transport http.RoundTripper
-	token     string
+	token     func(ctx context.Context) (string, error)
 }
 
 func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
