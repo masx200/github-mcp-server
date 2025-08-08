@@ -25,6 +25,9 @@ import (
 )
 
 type HttpServerConfig struct {
+	// Address to listen on(when transport is streamablehttp)(default: ":8080")
+	Address string
+
 	// Version of the server
 	Version string
 
@@ -162,7 +165,7 @@ func RunhttpServer(cfg HttpServerConfig) error {
 		// enable GitHub errors in the context
 
 		// errC <- httpServer.Listen(ctx, in, out)
-		errC <- httpServer.Start(":8080")
+		errC <- httpServer.Start(cfg.Address)
 	}()
 
 	// Output github-mcp-server string

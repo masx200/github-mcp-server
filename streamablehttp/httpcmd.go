@@ -33,6 +33,7 @@ func HttpCmdfactory(version string) *cobra.Command {
 			}
 
 			httpServerConfig := HttpServerConfig{
+				Address: viper.GetString("address"),
 				Version: version,
 				Host:    viper.GetString("host"),
 				Token: func(ctx context.Context) (string, error) {

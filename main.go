@@ -93,9 +93,12 @@ func init() {
 	rootCmd.PersistentFlags().Bool("enable-command-logging", false, "When enabled, the server will log all command requests and responses to the log file")
 	rootCmd.PersistentFlags().Bool("export-translations", false, "Save translations to a JSON file")
 	rootCmd.PersistentFlags().String("gh-host", "", "Specify the GitHub hostname (for GitHub Enterprise etc.)")
+
+	//when transport is streamablehttp
 	rootCmd.PersistentFlags().String("address", ":8080", "Address to listen on(when transport is streamablehttp)(default: \":8080\")")
 	// Bind flag to viper
 
+	//when transport is streamablehttp
 	_ = viper.BindPFlag("address", rootCmd.PersistentFlags().Lookup("address"))
 	_ = viper.BindPFlag("toolsets", rootCmd.PersistentFlags().Lookup("toolsets"))
 	_ = viper.BindPFlag("dynamic_toolsets", rootCmd.PersistentFlags().Lookup("dynamic-toolsets"))
