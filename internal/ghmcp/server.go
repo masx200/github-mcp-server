@@ -17,11 +17,13 @@ import (
 	mcplog "gitee.com/masx200/github-mcp-server/pkg/log"
 	"gitee.com/masx200/github-mcp-server/pkg/raw"
 	"gitee.com/masx200/github-mcp-server/pkg/translations"
+	"gitee.com/masx200/github-mcp-server/streamablehttp"
 	gogithub "github.com/google/go-github/v73/github"
 	"github.com/mark3labs/mcp-go/mcp"
 	"github.com/mark3labs/mcp-go/server"
 	"github.com/shurcooL/githubv4"
 	"github.com/sirupsen/logrus"
+	prefixed "github.com/x-cray/logrus-prefixed-formatter"
 )
 
 type MCPServerConfig struct {
@@ -49,7 +51,7 @@ type MCPServerConfig struct {
 	Translator translations.TranslationHelperFunc
 }
 
-func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
+func NewMCPServer(cfg MCPServerConfig, otherhooks ...*server.Hooks) (*server.MCPServer, error) {
 	apiHost, err := parseAPIHost(cfg.Host)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse API host: %w", err)
@@ -100,7 +102,8 @@ func NewMCPServer(cfg MCPServerConfig) (*server.MCPServer, error) {
 		},
 	}
 
-	ghServer := github.NewServer(cfg.Version, server.WithHooks(hooks))
+	opts := []server.ServerOption{server.WithHooks(streamablehttp.MergeHooksVariadic(append(otherhooks, hooks)...))}
+	ghServer := github.NewServer(cfg.Version, opts...)
 
 	enabledToolsets := cfg.EnabledToolsets
 	if cfg.DynamicToolsets {
@@ -191,23 +194,18 @@ func RunStdioServer(cfg StdioServerConfig) error {
 
 	t, dumpTranslations := translations.TranslationHelper()
 
-	ghServer, err := NewMCPServer(MCPServerConfig{
-		Version:         cfg.Version,
-		Host:            cfg.Host,
-		Token:           cfg.Token,
-		EnabledToolsets: cfg.EnabledToolsets,
-		DynamicToolsets: cfg.DynamicToolsets,
-		ReadOnly:        cfg.ReadOnly,
-		Translator:      t,
-	})
-	if err != nil {
-		return fmt.Errorf("failed to create MCP server: %w", err)
-	}
-
-	stdioServer := server.NewStdioServer(ghServer)
-
 	logrusLogger := logrus.New()
+	if cfg.Pretty {
 
+		logrusLogger.SetFormatter(&logrus.JSONFormatter{PrettyPrint: true})
+	} else {
+		logrusLogger.SetFormatter(&prefixed.TextFormatter{
+			ForceFormatting: true,
+			ForceColors:     true,
+			FullTimestamp:   true,
+			// 想继续输出 JSON 可改用 prettyjson-formatter 等
+		})
+	}
 	logrusLogger.SetOutput(os.Stderr)
 	if cfg.LogFilePath != "" {
 		file, err := os.OpenFile(cfg.LogFilePath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0600)
@@ -218,6 +216,21 @@ func RunStdioServer(cfg StdioServerConfig) error {
 		logrusLogger.SetLevel(logrus.DebugLevel)
 		logrusLogger.SetOutput(file)
 	}
+	ghServer, err := NewMCPServer(MCPServerConfig{
+		Version:         cfg.Version,
+		Host:            cfg.Host,
+		Token:           cfg.Token,
+		EnabledToolsets: cfg.EnabledToolsets,
+		DynamicToolsets: cfg.DynamicToolsets,
+		ReadOnly:        cfg.ReadOnly,
+		Translator:      t,
+	}, streamablehttp.CreateHooksWithEventLogging(logrusLogger, cfg.Pretty))
+	if err != nil {
+		return fmt.Errorf("failed to create MCP server: %w", err)
+	}
+
+	stdioServer := server.NewStdioServer(ghServer)
+
 	stdLogger := log.New(logrusLogger.Writer(), "stdioserver", 0)
 	stdioServer.SetErrorLogger(stdLogger)
 
